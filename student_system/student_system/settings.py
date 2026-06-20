@@ -81,6 +81,11 @@ WSGI_APPLICATION = 'student_system.wsgi.application'
 
 import dj_database_url
 
+# If DATABASE_URL is set to an HTTP/HTTPS endpoint (such as Supabase REST APIs), 
+# we clear it from django's context so it falls back to the default SQLite DB.
+if 'DATABASE_URL' in os.environ and (os.environ['DATABASE_URL'].startswith('http://') or os.environ['DATABASE_URL'].startswith('https://')):
+    del os.environ['DATABASE_URL']
+
 DATABASES = {
     'default': dj_database_url.config(
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
